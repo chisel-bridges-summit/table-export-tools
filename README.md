@@ -2,9 +2,9 @@
 
 This repo includes the tools used to export the sticky note collaborations done in Miro into an open source repo for sharing the output of Bridges Summit events.
 
-# Miro Sticky Note Exporter
-## Sticky Note Export Process
-## export_sticky_notes.py
+## Miro Sticky Note Exporter
+
+*export_sticky_notes.py*
 
 This Python script exports all sticky notes from every board in a Miro workspace using the Miro API v2. The script fetches all boards in the workspace, retrieves the sticky notes from each board, and saves them to a text file.
 

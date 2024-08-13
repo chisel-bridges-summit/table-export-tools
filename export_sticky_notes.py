@@ -1,15 +1,12 @@
 import requests
-#from dotenv import load_dotenv
+from dotenv import load_dotenv
 import os
 
 # Load environment variables from the .env file
-#load_dotenv()
+load_dotenv()
 
 # Get the API token from the environment variable
-#API_TOKEN = os.getenv('MIRO_API_TOKEN')
-#TODO: Fix broken dotenv requirement to use .env instead of hard coded API token
-
-API_TOKEN= 'MIRO API TOKEN'
+API_TOKEN = os.getenv('MIRO_API_TOKEN')
 BASE_URL = 'https://api.miro.com/v2'
 
 # Function to get all boards in the workspace
@@ -24,7 +21,8 @@ def get_boards():
         if response.status_code == 200:
             data = response.json()
             boards.extend(data['data'])
-            url = data.get('nextLink')  # Handle pagination
+            links = data['links']
+            url = links.get('next')  # Handle pagination
         else:
             print(f'Failed to fetch boards: {response.status_code} {response.text}')
             break
@@ -42,9 +40,10 @@ def get_sticky_notes(board_id):
         if response.status_code == 200:
             data = response.json()
             widgets = data['data']
+            links = data['links']
             # Filter to only sticky notes
             sticky_notes.extend([widget for widget in widgets if widget['type'] == 'sticky_note'])
-            url = data.get('nextLink')  # Handle pagination
+            url = links.get('next')  # Handle pagination
         else:
             print(f'Failed to fetch items for board {board_id}: {response.status_code} {response.text}')
             break
