@@ -1,0 +1,72 @@
+import requests
+#from dotenv import load_dotenv
+import os
+
+# Load environment variables from the .env file
+#load_dotenv()
+
+# Get the API token from the environment variable
+#API_TOKEN = os.getenv('MIRO_API_TOKEN')
+#TODO: Fix broken dotenv requirement to use .env instead of hard coded API token
+
+API_TOKEN= 'MIRO API TOKEN'
+BASE_URL = 'https://api.miro.com/v2'
+
+# Function to get all boards in the workspace
+def get_boards():
+    url = f'{BASE_URL}/boards'
+    headers = {
+        'Authorization': f'Bearer {API_TOKEN}'
+    }
+    boards = []
+    while url:
+        response = requests.get(url, headers=headers)
+        if response.status_code == 200:
+            data = response.json()
+            boards.extend(data['data'])
+            url = data.get('nextLink')  # Handle pagination
+        else:
+            print(f'Failed to fetch boards: {response.status_code} {response.text}')
+            break
+    return boards
+
+# Function to get all sticky notes from a board
+def get_sticky_notes(board_id):
+    url = f'{BASE_URL}/boards/{board_id}/items'
+    headers = {
+        'Authorization': f'Bearer {API_TOKEN}'
+    }
+    sticky_notes = []
+    while url:
+        response = requests.get(url, headers=headers)
+        if response.status_code == 200:
+            data = response.json()
+            widgets = data['data']
+            # Filter to only sticky notes
+            sticky_notes.extend([widget for widget in widgets if widget['type'] == 'sticky_note'])
+            url = data.get('nextLink')  # Handle pagination
+        else:
+            print(f'Failed to fetch items for board {board_id}: {response.status_code} {response.text}')
+            break
+    return sticky_notes
+
+# Function to export sticky notes
+def export_sticky_notes(sticky_notes):
+    with open('sticky_notes_export.txt', 'w') as file:
+        for note in sticky_notes:
+            file.write(f"{note['id']}: {note['data']['content']}\n")
+
+def main():
+    all_sticky_notes = []
+    boards = get_boards()
+    
+    for board in boards:
+        print(f"Fetching sticky notes for board: {board['name']}")
+        sticky_notes = get_sticky_notes(board['id'])
+        all_sticky_notes.extend(sticky_notes)
+    
+    export_sticky_notes(all_sticky_notes)
+    print(f"Exported {len(all_sticky_notes)} sticky notes.")
+
+if __name__ == '__main__':
+    main()
