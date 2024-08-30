@@ -51,6 +51,11 @@ def get_sticky_notes(board_id):
             break
     return sticky_notes
 
+#Override Incorrect Folder Names
+def clean_folder(folder):
+    if folder == "Thoughtleader Talk":
+        folder = "Thought Leader Talk"
+
 # Function to export sticky notes
 def export_sticky_notes(sticky_notes, folder):
     os.makedirs(f"{SUBFOLDER}", exist_ok=True)
@@ -70,7 +75,7 @@ def main():
         board_name = board['name']
         match = re.search(r"^(.*?)(?=:)", board_name)
         if match:
-            folder = match.group(1).strip()
+            folder = clean_folder(match.group(1).strip())
         else:
             folder = "None"
         print(f"Fetching sticky notes for board: {board_name}, folder {folder}")
