@@ -1,6 +1,7 @@
 import requests
 from dotenv import load_dotenv
 import os
+import re
 
 # Load environment variables from the .env file
 load_dotenv()
@@ -8,6 +9,7 @@ load_dotenv()
 # Get the API token from the environment variable
 API_TOKEN = os.getenv('MIRO_API_TOKEN')
 BASE_URL = 'https://api.miro.com/v2'
+SUBFOLDER = 'gitrepo'
 
 # Function to get all boards in the workspace
 def get_boards():
@@ -50,21 +52,32 @@ def get_sticky_notes(board_id):
     return sticky_notes
 
 # Function to export sticky notes
-def export_sticky_notes(sticky_notes):
-    with open('sticky_notes_export.txt', 'w') as file:
+def export_sticky_notes(sticky_notes, folder):
+    os.makedirs(f"{SUBFOLDER}", exist_ok=True)
+    os.makedirs(f"{SUBFOLDER}/{folder}", exist_ok=True)
+    with open(f"{SUBFOLDER}/{folder}/sticky_notes_export.txt", 'a') as file:
         for note in sticky_notes:
-            file.write(f"{note['id']}: {note['data']['content']}\n")
+            data = note['data']
+            if data['content']:
+                print(f"'{data}'")
+                file.write(f"{note['id']}: {note['data']['content']}\n")
 
 def main():
     all_sticky_notes = []
     boards = get_boards()
     
     for board in boards:
-        print(f"Fetching sticky notes for board: {board['name']}")
+        board_name = board['name']
+        match = re.search(r"^(.*?)(?=:)", board_name)
+        if match:
+            folder = match.group(1).strip()
+        else:
+            folder = "None"
+        print(f"Fetching sticky notes for board: {board_name}, folder {folder}")
         sticky_notes = get_sticky_notes(board['id'])
-        all_sticky_notes.extend(sticky_notes)
+        export_sticky_notes(sticky_notes, folder)
     
-    export_sticky_notes(all_sticky_notes)
+    
     print(f"Exported {len(all_sticky_notes)} sticky notes.")
 
 if __name__ == '__main__':
