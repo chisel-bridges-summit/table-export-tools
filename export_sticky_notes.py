@@ -76,7 +76,6 @@ def export_sticky_notes(sticky_notes, folder):
                 position = "{'x': 0, 'y': 0}"
             if data['content']:
                 content = clean_content(data['content'])
-                print(f"'{content}'")
                 file.write(f"\"{content}\",{position['x']},{position['y']}\n")
 
 def main():
