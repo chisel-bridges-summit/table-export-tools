@@ -55,12 +55,12 @@ def get_sticky_notes(board_id):
 def export_sticky_notes(sticky_notes, folder):
     os.makedirs(f"{SUBFOLDER}", exist_ok=True)
     os.makedirs(f"{SUBFOLDER}/{folder}", exist_ok=True)
-    with open(f"{SUBFOLDER}/{folder}/sticky_notes_export.txt", 'a') as file:
+    with open(f"{SUBFOLDER}/{folder}/sticky_notes_export.csv", 'a') as file:
         for note in sticky_notes:
             data = note['data']
             if data['content']:
                 print(f"'{data}'")
-                file.write(f"{note['id']}: {note['data']['content']}\n")
+                file.write(f"{data['content']},{data['position']['x']},{data['position']['y']}\n")
 
 def main():
     all_sticky_notes = []
