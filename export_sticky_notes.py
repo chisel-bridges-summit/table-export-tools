@@ -9,7 +9,7 @@ load_dotenv()
 # Get the API token from the environment variable
 API_TOKEN = os.getenv('MIRO_API_TOKEN')
 BASE_URL = 'https://api.miro.com/v2'
-SUBFOLDER = 'gitrepo'
+SUBFOLDER = 'gitrepo/StickyNotes'
 
 # Function to get all boards in the workspace
 def get_boards():
@@ -60,11 +60,15 @@ def clean_folder(folder):
 def export_sticky_notes(sticky_notes, folder):
     os.makedirs(f"{SUBFOLDER}", exist_ok=True)
     os.makedirs(f"{SUBFOLDER}/{folder}", exist_ok=True)
+    position = []
     with open(f"{SUBFOLDER}/{folder}/sticky_notes_export.csv", 'a') as file:
         for note in sticky_notes:
             data = note['data']
-            position = note['position']
-            print(data)
+            try: 
+                position = note['position']
+            except:
+                position['x'] = 0
+                position['y'] = 0 
             if data['content']:
                 print(f"'{data}'")
                 file.write(f"{data['content']},{position['x']},{position['y']}\n")
@@ -77,7 +81,7 @@ def main():
         board_name = board['name']
         match = re.search(r"^(.*?)(?=:)", board_name)
         if match:
-            folder = clean_folder(match.group(1).strip())
+            folder = match.group(1).strip()
         else:
             folder = "None"
         print(f"Fetching sticky notes for board: {board_name}, folder {folder}")
