@@ -59,7 +59,6 @@ def clean_folder(folder):
 
 #Prep content for CSV
 def clean_content(content):
-    print(f"clean_content: content: {content}")
     content = content.replace('"','""')
     return content
 
@@ -76,7 +75,7 @@ def export_sticky_notes(sticky_notes, folder):
                 position = "{'x': 0, 'y': 0}"
             if data['content']:
                 content = clean_content(data['content'])
-                file.write(f"\"{content}\",{position['x']},{position['y']}\n")
+                file.write(f"{note['id']},\"{content}\",{position['x']},{position['y']}\n")
 
 def main():
     all_sticky_notes = []

@@ -5,4 +5,6 @@
 pyvenv.cfg
 *.txt
 /basecamp
+basecamp
+/basecamp/*
 
