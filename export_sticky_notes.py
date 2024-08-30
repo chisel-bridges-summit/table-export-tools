@@ -9,7 +9,7 @@ load_dotenv()
 # Get the API token from the environment variable
 API_TOKEN = os.getenv('MIRO_API_TOKEN')
 BASE_URL = 'https://api.miro.com/v2'
-SUBFOLDER = 'gitrepo/StickyNotes'
+SUBFOLDER = 'basecamp/StickyNotes'
 
 # Function to get all boards in the workspace
 def get_boards():
