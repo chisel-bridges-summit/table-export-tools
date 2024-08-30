@@ -63,9 +63,11 @@ def export_sticky_notes(sticky_notes, folder):
     with open(f"{SUBFOLDER}/{folder}/sticky_notes_export.csv", 'a') as file:
         for note in sticky_notes:
             data = note['data']
+            position = note['position']
+            print(data)
             if data['content']:
                 print(f"'{data}'")
-                file.write(f"{data['content']},{data['position']['x']},{data['position']['y']}\n")
+                file.write(f"{data['content']},{position['x']},{position['y']}\n")
 
 def main():
     all_sticky_notes = []
