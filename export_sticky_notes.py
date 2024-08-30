@@ -55,23 +55,29 @@ def get_sticky_notes(board_id):
 def clean_folder(folder):
     if folder == "Thoughtleader Talk":
         folder = "Thought Leader Talk"
+    return folder
+
+#Prep content for CSV
+def clean_content(content):
+    print(f"clean_content: content: {content}")
+    content = content.replace('"','""')
+    return content
 
 # Function to export sticky notes
 def export_sticky_notes(sticky_notes, folder):
     os.makedirs(f"{SUBFOLDER}", exist_ok=True)
     os.makedirs(f"{SUBFOLDER}/{folder}", exist_ok=True)
-    position = []
     with open(f"{SUBFOLDER}/{folder}/sticky_notes_export.csv", 'a') as file:
         for note in sticky_notes:
             data = note['data']
             try: 
                 position = note['position']
             except:
-                position['x'] = 0
-                position['y'] = 0 
+                position = "{'x': 0, 'y': 0}"
             if data['content']:
-                print(f"'{data}'")
-                file.write(f"{data['content']},{position['x']},{position['y']}\n")
+                content = clean_content(data['content'])
+                print(f"'{content}'")
+                file.write(f"\"{content}\",{position['x']},{position['y']}\n")
 
 def main():
     all_sticky_notes = []
@@ -81,7 +87,7 @@ def main():
         board_name = board['name']
         match = re.search(r"^(.*?)(?=:)", board_name)
         if match:
-            folder = match.group(1).strip()
+            folder = clean_folder(match.group(1).strip())
         else:
             folder = "None"
         print(f"Fetching sticky notes for board: {board_name}, folder {folder}")
