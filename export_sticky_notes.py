@@ -83,14 +83,15 @@ def main():
     
     for board in boards:
         board_name = board['name']
-        match = re.search(r"^(.*?)(?=:)", board_name)
-        if match:
-            folder = clean_folder(match.group(1).strip())
-        else:
-            folder = "None"
-        print(f"Fetching sticky notes for board: {board_name}, folder {folder}")
+        # match = re.search(r"^(.*?)(?=:)", board_name)
+        # if match:
+        #    folder = clean_folder(match.group(1).strip())
+        # else:
+        #     folder = "None"
+        #
+        print(f"Fetching sticky notes for board: {board_name}")
         sticky_notes = get_sticky_notes(board['id'])
-        export_sticky_notes(sticky_notes, folder)
+        export_sticky_notes(sticky_notes, board_name)
     
     
     print(f"Exported {len(all_sticky_notes)} sticky notes.")
