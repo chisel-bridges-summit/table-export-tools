@@ -1,12 +1,14 @@
 import http.client
 import json
 
+API_TOKEN = os.getenv('MIRO_API_TOKEN')
+
 conn = http.client.HTTPSConnection("api.miro.com")
 
 headers = {
     'accept': 'application/json',
     'content-type': 'application/json',
-    'Authorization': 'Bearer '
+    'Authorization': API_TOKEN
 }
 
 
