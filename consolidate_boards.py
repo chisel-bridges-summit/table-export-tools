@@ -1,5 +1,11 @@
 import http.client
 import json
+from dotenv import load_dotenv
+import os
+import re
+
+# Load environment variables from the .env file
+load_dotenv()
 
 API_TOKEN = os.getenv('MIRO_API_TOKEN')
 
