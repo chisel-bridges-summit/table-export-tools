@@ -6,7 +6,7 @@ conn = http.client.HTTPSConnection("api.miro.com")
 headers = {
     'accept': 'application/json',
     'content-type': 'application/json',
-    'Authorization': 'Bearer eyJtaXJvLm9yaWdpbiI6ImV1MDEifQ_kBy8F5qHtsQtyxbB9PJdDcx0g9g'
+    'Authorization': 'Bearer '
 }
 
 
