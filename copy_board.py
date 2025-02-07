@@ -1,13 +1,20 @@
 import http.client
 import json
+from dotenv import load_dotenv
+import os
+import re
+
+# Load environment variables from the .env file
+load_dotenv()
+
+API_TOKEN = os.getenv('MIRO_API_TOKEN')
 
 conn = http.client.HTTPSConnection("api.miro.com")
 
 headers = {
-  'accept': 'application/json',
-  'content-type': 'application/json',
-  'Authorization': 'Bearer INSERT SECRET CODE HERE',
-  'Cookie': 'AWSALBTG=p23cs0hhA9pdrd2TusjyKTZ7R9ZHMe6gKDCAGBS/Pg6JhCuWAh/0/rPg9SPpHh5mWo5ePNrt7EPdy9nPyR7vLcKeRocy18Z/7wGADvpJ7q/Tw4bvQ9nPGD+i8X6eya8hFJ1Fq8Mgty+EcmIo+M3spP8muh2M8Uux+CWrQ14AJJ92; AWSALBTGCORS=p23cs0hhA9pdrd2TusjyKTZ7R9ZHMe6gKDCAGBS/Pg6JhCuWAh/0/rPg9SPpHh5mWo5ePNrt7EPdy9nPyR7vLcKeRocy18Z/7wGADvpJ7q/Tw4bvQ9nPGD+i8X6eya8hFJ1Fq8Mgty+EcmIo+M3spP8muh2M8Uux+CWrQ14AJJ92'
+    'accept': 'application/json',
+    'content-type': 'application/json',
+    'Authorization': API_TOKEN
 }
 
 for board_number in range(2, 33):
